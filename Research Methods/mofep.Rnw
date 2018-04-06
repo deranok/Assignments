@@ -1,0 +1,237 @@
+\documentclass[12pt]{article}
+\title{\textbf{UGBS \_\_\_: Research Methods\\ Assignment 1}}
+\author{
+	\textbf{Group Members}\\
+	10407215 -- Loretta Aryee \\
+	10424998 -- Ankumah Andre Payin\\
+	10636922 -- Dennis Elorm Avuletey\\
+	10637605 -- Akosua Krah Agyei\\
+	10380879 -- Oswald Selawoe Tettey\\
+	10379957 -- Priscilla Aborgah\\
+	10374040 -- Opoku Agyin Andrew\\
+	10391689 -- Adu Faustina\\
+	10379353 -- Kelly Cudjoe Denning\\
+	10423631 -- Oppey Geoff
+	}
+\usepackage[hmargin=2cm,vmargin=3.5cm]{geometry}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\date{Due On: 6th April, 2018.}
+
+\begin{document}
+	\maketitle
+	\clearpage
+	\begin{enumerate}[a)]
+	\item Dependent variable: Property tax rate (TR)\\
+	Independent variables: Number of people in household (NP), Value of Property (V), Number of housing units per square mile (HU), Per capita income of inhabitant (Y), Monthly rent on the property (RE), Type of property (T), location of property (L) and type of assembly (A).\\
+	
+	\item \ 
+    \begin{center}
+		\begin{table}[h]
+			\begin{tabular}{l|c|c}
+			Variable & Numerical or Categorical & Scale of Measurement \\
+			\hline
+			Property tax rate & Numerical & Ratio \\
+			Number of people in the household & Numerical & Ratio \\
+			Value of Property & Numerical & Ratio \\
+			Number of housing units per square mile & Numerical & Ratio \\
+			Per capita income of inhabitant & Numerical & Ratio \\
+			Monthly rent on property & Numerical & Ratio \\
+			Type of property & Categorical & Nominal \\
+			Location of property & Categorical & Ordinal \\
+			Type of assembly & Categorical & Ordinal \\
+		\end{tabular}
+		\end{table}
+	\end{center}
+	
+	\item Load the file
+	
+  <<>>=
+	hdata <- read.csv("ptr.csv")
+	@
+	Descriptive statistics
+	
+	<<>>=
+	library("psych")
+	describe(hdata)
+	@
+	
+	\item
+	\begin{enumerate}[i.]
+	\item The standard deviation of the NP variable is 55808.03
+	\item The skewness of the Y variable is -0.07
+	\item The kurtosis of the RE variable is -1.27
+	\item The mean of TR is 15.36
+	\end{enumerate}
+	
+	% Please complete this question later ... 
+	\item
+	\begin{enumerate}[i.]
+	\item The standard deviation measures the dispersion of the data values about the average point.
+	\item The skewness measures whether more of the values of a variable are falling to the left or
+	right of the central point of the values. If the values falling to the left of the central point
+	are equal to those falling to the right, then the variable is not skewed.
+	\item Kurtosis gives a numerical estimate of the shape of the distribution of the given variable.
+	\item The mean is an estimator of the central point of a variable.
+	\end{enumerate}
+	
+	\item
+	Q-Q Plot:
+	<<>>=
+	qqnorm(hdata$TR, col="black", lwd=4,
+	       main = "Q-Q Plot of Property Tax Revenue")
+	qqline(hdata$TR, col="black", lwd=4)
+	@
+	Given a normally distributed random variable, all the points should fall around the line. Since some of the variables are falling outside the line, it seems that the data is not normally distributed.\\
+	
+	Shapiro Wilk's test of normality:
+	<<>>=
+	shapiro.test(hdata$TR)
+	@
+	Given that the p-value (0.000112) is less than our significant value (0.05), we reject the null hypothesis at 5\% significant level and conclude that the Tax Revenue variable is not normally distributed.\\
+	
+
+	
+	Density plot.
+	
+	<<>>=
+	plot(density(hdata$TR), main = "Density plot of Property Tax Revenue")
+	@
+	
+	For a normally distributed variable, there would be only one `hump'. Since there are two `humps', we may assume that the variable is not normally distributed.\\
+		
+		Since all three tests point to the fact that the data is not normally distributed, we may assume that the data is indeed not normally distributed at this point.\\
+	\item
+	Scatter plot matrix of Tax Revenue (TR), Value of Property(V), Number of people in household (P), Number of housing units per square mile (HU), Per capita income of inhabitant (Y) and Monthly rent on property (RE).
+	<<>>=
+	pairs(~TR + V + NP + HU + Y + RE, col="black", data=hdata)
+	@
+	There is no clear relationship between the variables TR and HU.
+	\item
+	Pearson correlation (rounded to 2 decimal places).
+	<<>>=
+	hdata <- read.csv("ptr_coded.csv") # First load the coded dataset
+  suppressMessages(library(Hmisc)) # include the Hmisc library
+  rcorr(as.matrix(hdata),2)
+	@
+	
+	\item
+	\begin{enumerate}[i.]
+	\item
+	Since the p-value (0.8908) is greater than the alpha (0.05), the correlation between TR and NP is insignificant at 5\% significance level.
+	\item
+	Very good predictors are LU (0.70), AD (-0.63) and TRE (-0.61). 
+	\item
+	Highly multicollinear variables: LU and AMU (-0.60), LU and LS (-0.47), AD and AMU (0.47).
+	
+	\item
+	Most highly correlated variables: LU and TR (0.70), TR and AD (-0.63)
+	
+	\item
+	Variables with no relationship: NP  and V (0.00) and Y and NP (0.00)
+	\end{enumerate}
+	
+	\item
+	Simple linear regression plot
+	
+	<<>>=
+  hsimple = lm(TR ~ RE, data=hdata)
+  plot(TR ~ RE, col="blue", lwd=2, data=hdata, 
+       main="My MBA Scatterplot and fitted line")
+  abline(hsimple, lwd=4, col="red")
+  @
+  
+  \item
+  The regression model can be given as
+	
+	  \begin{equation*}
+  TR = \beta_o + \beta_1V+\beta_2NP + \beta_3HU + \beta_4Y + \beta_5RE+ \beta_6T + \beta_7LU + \beta_8LS + \beta_9AD + \beta_{10}AMU + \mu
+  \end{equation*}
+  
+  \item
+  To run the multiple regression model.
+	<<>>=
+	hmulti = lm(TR ~ V+NP+HU+Y+RE+T+LU+LS+AD+AMU, data=hdata); summary(hmulti)
+  round(hmulti$coefficients,6)
+  @
+  
+  \item
+  The estimated regression model can be given as\\
+  TR = 14.12 + 0.000096V + 0.0000013NP + 0.0031HU - 0.000068Y + 0.000503RE - 2.44T + 3.051LU + 2.023LS -2.27AD + 0.1226AMU
+  
+  \item
+  The significant variables are V, T, LU, LS and AD, because their p-values are less than the 5\% significance level.
+  
+  \item
+  Since the R-square (83.45\%) is greater than 50\%, the regression model is well fit. In other words, all the independent variables together explain 83.45\% of the variation in the Property Tax Rate (TR).
+  
+  \item
+  Yes, the co-efficients are jointly significant since the F-statistic's p-value of 2.2e-10 (00000000000000026) is less than the alpha of 0.05.
+  
+  \item
+  \begin{itemize}
+    \item
+    Number of people in Household (NP): On the average, holding Value of Property (V), Number of housing units (HU), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), Location and Type of Assembly constant, Property Tax Rate (TR) will be 0.0000013 units higher if Number of people in Household (NP) increased by a single unit.
+    \item
+    Number of housing units (HU): On the average, holding Value of Property (V),Number of people in Household (NP), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), Location and Type of Assembly constant, Property Tax Rate (TR) will be 0.003058 units higher if Number of housing units (HU) increased by a single unit.
+    \item
+    Type of assembly (District): On the average, holding Value of Property (V), Number of people in Household (NP), Number of housing units (HU), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), and Location, Property Tax Rate (TR) will be 2.27 units less if the Type of assembly was a district than metropolitan.
+    \item
+    Type of assembly (Metropolitan): On the average, holding Value of Property (V), Number of people in Household (NP), Number of housing units (HU), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), and Location, Property Tax Rate (TR) will be 0.1226 units more if the Type of assembly was a municipal than metropolitan.
+    \item
+    Location of property (Urban): On the average, holding Value of Property (V), Number of people in Household (NP), Number of housing units (HU), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), and Type of Assembly constant, Property Tax Rate (TR) will be 3.051 units more if the location of the property was urban than rural.
+    \item
+    Location of property (Suburban): On the average, holding Value of Property (V), Number of people in Household (NP), Number of housing units (HU), Per Capita Income of inhabitants (Y), Monthly rent on property (RE), Type of Property (T), and Type of Assembly constant, Property Tax Rate (TR) will be 2.023 units more if the location of the property was suburban than rural.
+  \end{itemize}
+  
+  \item
+  To get the VIF,
+  <<>>=
+  suppressMessages(library(car)) # load the car library first
+  round(vif(hmulti), 2)
+  @
+  Between LU and AMU, we drop LU with the higher VIF of 2.73. Between LU and LS we drop LU with the higher VIF of 2.73. Between AD and AMU, we drop AD with the higher VIF of 2.33.
+  
+  \item
+  To do predictions using the model, 
+  
+  \begin{align*}
+  TR_1 &= 14.12 + 0.000096(0) + 0.0000013(5) + 0.003(25) - 0.000068(200) + \\
+  &\ \ \ \ 0.000503(100) - 2.44(1) + 3.051(0) + 2.023(0) + 2.27(0) + 0.1226(1)\\
+  &= 14.12 + 0 + 0.0000065 + 0.0775 + 0.0136 + 0.0503 - 2.44 + 0 + 0 + 0 + 0.1226\\
+  &= 11.84
+  \end{align*}
+  
+  \begin{align*}
+  TR_2 &= 14.12 + 0.000096(0) + 0.0000013(5) + 0.003(20) - 0.000068(250) + \\
+  &\ \ \ \ 0.000503(150) - 2.44(1) + 3.051(1) + 2.023(0) + 2.27(0) + 0.1226(1)\\
+  &= 14.12 + 0 + 0.0000065 + 0.062 - 0.017 + 0.07545 - 2.44 + 3.051 + 0 + 0.1226\\
+  &= 14.97
+  \end{align*}
+  
+  \begin{align*}
+  TR_2 - TR_1  = 14.97 - 11.84 = 3.13
+  \end{align*}
+  
+  We could also use R:
+  <<>>=
+  nd <- data.frame(V=c(0, 0), NP=c(5, 5), HU=c(25, 20), Y=c(200, 250),
+                   RE=c(100, 150), T=c(1, 1), LU=c(0, 1), LS=c(0, 0), 
+                   AD=c(0, 0), AMU=c(1, 1))
+  
+  #calculate the expected values based on the new data
+  predictions <- predict(object = hmulti, newdata=nd)
+  
+  #display the expected values
+  predictions
+  
+  # calculate the difference between the two predictions
+  difference <- predictions[2] - predictions[1]
+  
+  # show the difference between the two expected values
+  difference
+  @
+  
+  The difference (3.06) could be attributed to the higher number of housing units, the higher average income, the higher rent and the difference in locations. 
+	\end{enumerate}
+\end{document}

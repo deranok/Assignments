@@ -1,0 +1,182 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{tikz}
+\setlength\parindent{0pt}
+\usepackage[hmargin=3cm,vmargin=3.5cm]{geometry}
+
+\title{UGBS 618: Production and Operations Management\\
+	Assignment 2}
+\author{Oppey Geoff 10423631 \\
+	Kelly Denning 10379353\\
+	Akosua Krah Agyei	10637605\\
+	Dennis Elorm Avuletey    10636922\\
+	Adu Faustina	10391689\\}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section*{Question 1}
+	Since there are five identical components arranged in series, the reliability of the system would be given as:\\
+	
+	% Please add a diagram showing t
+	\begin{tikzpicture}
+	\path[draw] (-5,0) -- (-4,0);
+	\draw (-4,-1) rectangle (-2,1);
+	\draw (-3, 0) node {R};
+	\path[draw] (-2,0) -- (-1,0);
+	\draw (-1,-1) rectangle (1,1);
+	\draw (0, 0) node {R};
+	\path[draw] (1,0) -- (2,0);
+	\draw (2,-1) rectangle (4,1);
+	\draw (3, 0) node {R};
+	\path[draw] (4,0) -- (5,0);
+	\draw (5,-1) rectangle (7,1);
+	\draw (6,0) node {R};
+	\path[draw] (7,0) -- (8,0);
+	\draw (8,-1) rectangle (10,1);
+	\draw (9,0) node {R};
+	\path[draw] (10,0) -- (11,0);
+	\end{tikzpicture}
+	\\
+	
+	$ Reliability = R * R * R * R * R = R ^ 5$ , where R is the reliability of the internal component.\\
+	
+	Reliability of the Basic System:\\
+	\begin{align*}
+	R_{basic} &= R^5\\
+	&= 0.8^5\\
+	&= 0.32768\\
+	&= 32.768\%\\
+	\end{align*}
+	
+	
+	Reliability of the Standard System:\\
+	\begin{align*}
+	R_{standard} &= R^5\\
+	&= 0.9^5\\
+	&= 0.59049\\
+	&= 59.049\%\\
+	\end{align*}
+	
+	Reliability of the Professional System:\\
+	\begin{align*}
+	R{professional} &= R^5\\
+	&= 0.99^5\\
+	&= 0.95099\\
+	&= 95.099\%\\
+	\end{align*}
+	
+	The professional system is the most reliable system because it has the highest reliability of 95.099\%.\\
+	
+	
+	In order to find out which one to choose, we must compute the total cost of running the systems which is given as: \\
+	
+	\begin{math} 
+	Total\ Cost = (Cost\ of\ Failure\ *\ Probability\ of\ Failure)\ +\ Cost\ of\ initial\ Purchase\\
+	\end{math}
+	
+	\begin{math}
+	Probability\ of\ failure = 1 - Reliability\\
+	\end{math}
+	
+	Basic System
+	\begin{align*}
+	Total\ Cost &= (50,000 * (1 - 0.32768)) + 1,000\\
+	&= (50,000 * 0.67232) + 1,000\\
+	&= 33,616 + 1,000\\
+	&= \$34,616\\
+	\end{align*}
+	
+	Standard System
+	\begin{align*}
+	Total\ Cost &= (50,000 * (1 - 0.59049)) + 2,000\\
+	&= (50,000 * 0.40951) + 2,000\\
+	&= 20,475.5 + 2,000\\
+	&= \$22,475.5\\
+	\end{align*}
+	
+	Professional System
+	\begin{align*}
+	Total\ Cost &= (50,000 * (1 - 0.95099)) + 5,000\\
+	&= (50,000 * 0.04901) + 5,000\\
+	&= 2,450.5 + 5,000\\
+	&= \$7,450.5\\
+	\end{align*}
+	
+	We must therefore choose the Professional system with the least estimated total cost of purchase and running of \$7,450.5.
+	
+	
+	\section*{Question 2}
+	
+	a) With glue only,\\
+	\begin{center}
+		\begin{tikzpicture}
+		\draw (-1,-1) rectangle (1, 1);
+		\draw (0,0) node {$R_1$};
+		\path[draw] (-2,0) -- (-1,0);
+		\path[draw] (1,0) -- (2,0);
+		\end{tikzpicture}
+	\end{center}
+	
+	Reliability = $R_{1}$ =  0.8.\\
+	
+	With glue and stitching,
+	\begin{center}
+		\begin{tikzpicture}
+		\draw (-1,2) rectangle (1, 4);
+		\draw (0,3) node {$R_2$};
+		\path[draw] (0,1) -- (0,2);
+		\draw (-1,-1) rectangle (1, 1);
+		\draw (0,0) node {$R_1$};
+		\path[draw] (-2,0) -- (-1,0);
+		\path[draw] (1,0) -- (2,0);
+		\end{tikzpicture}
+	\end{center}
+	
+	$R_{1}$ = Reliability of glue\\
+	$R_{2}$ = Reliability of stitching\\
+	% diagram
+	\begin{align*}
+	Reliability &= R_{1}  + ((1 - R_{1}) * R_{2})\\
+	&= 0.8  + ((1-0.8) * 0.92)\\
+	&= 0.8 + (0.2 * 0.92)\\
+	&= 0.8 + 0.184\\
+	&= 0.984\\
+	\end{align*}
+	
+	b) With additional row of stitching
+	
+	% diagram
+	\begin{center}
+		\begin{tikzpicture}
+		\draw (-1,5) rectangle (1, 7);
+		\draw (0,6) node {$R_2$};
+		\path[draw] (0,4) -- (0,5);
+		\draw (-1,2) rectangle (1, 4);
+		\draw (0,3) node {$R_2$};
+		\path[draw] (0,1) -- (0,2);
+		\draw (-1,-1) rectangle (1, 1);
+		\draw (0,0) node {$R_1$};
+		\path[draw] (-2,0) -- (-1,0);
+		\path[draw] (1,0) -- (2,0);
+		\end{tikzpicture}
+	\end{center}
+	
+	$R_{1}$ = Reliability of glue\\
+	$R_{2}$ = Reliability of stitching\\
+	
+	\begin{align*}
+	Reliability &= 1 - [(1 - R_{1}) * (1 - R_{2}) * (1 - R_{2})]\\
+	&= 1 - [(1- 0.8) * (1- 0.92) * (1 - 0.92)]\\
+	&= 1 - [0.2 * 0.08 * 0.08]\\
+	&= 1 - 0.00128\\
+	&= 0.99872\\
+	\end{align*}
+	
+	Change in Reliability = 0.99872 - 0.984 = 0.01472 = 1.472\%\\
+	
+	By adding an additional row of stitching, the reliability of the military boots increased by 1.472\%.
+\end{document}
